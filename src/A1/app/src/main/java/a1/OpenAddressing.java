@@ -32,7 +32,7 @@ public class OpenAddressing {
   }
 
   private int probe(int key) {
-    return ((A * key) % power2(w) >> (w - r));
+    return (((A * key) % power2(w)) >> (w - r));
   }
 
   public int probe(int key, int i) {
@@ -43,7 +43,7 @@ public class OpenAddressing {
     int probe = 0, curr = probe(key, probe++);
     while (Table[curr] != -1) curr = probe(key, probe++);
     Table[curr] = key;
-    return probe;
+    return probe - 1;
   }
 
   public int insertKeyArray(int[] keyArray) {
@@ -57,11 +57,11 @@ public class OpenAddressing {
 
     while (Table[curr] != key) {
       curr = probe(key, probe++);
-      if (curr == first) return 0;
+      if (curr == first) return probe - 1;
     }
 
     Table[curr] = -1;
 
-    return probe;
+    return probe - 1;
   }
 }

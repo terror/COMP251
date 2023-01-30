@@ -32,7 +32,7 @@ public class Chaining {
   }
 
   public int chain(int key) {
-    return ((A * key) % power2(w) >> (w - r));
+    return (((A * key) % power2(w)) >> (w - r));
   }
 
   public int insertKey(int key) {
