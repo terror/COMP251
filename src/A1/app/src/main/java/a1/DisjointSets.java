@@ -10,7 +10,11 @@ public class DisjointSets {
     if (n > 0) {
       par = new int[n];
       rank = new int[n];
-      for (int i = 0; i < this.par.length; i++) par[i] = i;
+
+      for (int i = 0; i < n; i++) {
+        par[i] = i;
+        rank[i] = 0;
+      }
     }
   }
 
@@ -44,46 +48,20 @@ public class DisjointSets {
   }
 
   public int union(int i, int j) {
-    if (find(i) == find(j)) return 0;
-
     int a = find(i), b = find(j);
 
-    return 1;
-  }
+    if (a == b) return a;
 
-  public static void main(String[] args) {
-    DisjointSets myset = new DisjointSets(6);
+    if (rank[a] > rank[b]) {
+      int t = b;
+      b = a;
+      a = t;
+    }
 
-    System.out.println(myset);
-    System.out.println("-> Union 2 and 3");
+    par[a] = b;
 
-    myset.union(2, 3);
+    if (rank[a] == rank[b]) ++rank[b];
 
-    System.out.println(myset);
-    System.out.println("-> Union 2 and 3");
-
-    myset.union(2, 3);
-
-    System.out.println(myset);
-    System.out.println("-> Union 2 and 1");
-
-    myset.union(2, 1);
-
-    System.out.println(myset);
-    System.out.println("-> Union 4 and 5");
-
-    myset.union(4, 5);
-
-    System.out.println(myset);
-    System.out.println("-> Union 3 and 1");
-
-    myset.union(3, 1);
-
-    System.out.println(myset);
-    System.out.println("-> Union 2 and 4");
-
-    myset.union(2, 4);
-
-    System.out.println(myset);
+    return b;
   }
 }
