@@ -8,6 +8,9 @@ public class OpenAddressing {
   int w, r;
   public int[] Table;
 
+  private final int NULL = -1;
+  private final int EMPTY = -2;
+
   protected OpenAddressing(int w, int seed, int A) {
     this.w = w;
     this.r = (w - 1) / 2 + 1;
@@ -18,7 +21,7 @@ public class OpenAddressing {
 
     this.Table = new int[m];
 
-    for (int i = 0; i < m; i++) Table[i] = -1;
+    for (int i = 0; i < m; i++) Table[i] = NULL;
   }
 
   public static int power2(int w) {
@@ -40,10 +43,16 @@ public class OpenAddressing {
   }
 
   public int insertKey(int key) {
-    int probe = 0, curr = probe(key, probe++);
-    while (Table[curr] != -1) curr = probe(key, probe++);
+    int probe = 0, curr = probe(key, probe);
+
+    while (Table[curr] >= 0) {
+      curr = probe(key, ++probe);
+      if (probe == m) return probe;
+    }
+
     Table[curr] = key;
-    return probe - 1;
+
+    return probe;
   }
 
   public int insertKeyArray(int[] keyArray) {
@@ -53,15 +62,16 @@ public class OpenAddressing {
   }
 
   public int removeKey(int key) {
-    int probe = 0, curr = probe(key, probe++), first = curr;
+    int probe = 0, curr = probe(key, probe);
 
     while (Table[curr] != key) {
-      curr = probe(key, probe++);
-      if (curr == first) return probe - 1;
+      if (Table[curr] == NULL) return probe + 1;
+      curr = probe(key, ++probe);
+      if (probe == m) return probe;
     }
 
-    Table[curr] = -1;
+    Table[curr] = EMPTY;
 
-    return probe - 1;
+    return probe;
   }
 }
