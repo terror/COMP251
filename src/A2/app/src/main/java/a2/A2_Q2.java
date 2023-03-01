@@ -36,7 +36,7 @@ public class A2_Q2 {
   static int[] dp(int[] coins, int amount) {
     int[] table = new int[amount + 1];
 
-    Arrays.fill(table, amount + 1);
+    Arrays.fill(table, Integer.MAX_VALUE);
 
     table[0] = 0;
 
@@ -55,11 +55,9 @@ public class A2_Q2 {
    * @return The smallest counter-example if greedy doesn't work, otherwise -1.
    */
   public static int change(int[] denominations) {
-    if (denominations.length == 0 || denominations.length == 1) return -1;
-
     int amount = denominations[denominations.length - 1] + denominations[denominations.length - 2];
 
-    int[] table = dp(denominations, amount);
+    int[] table = dp(denominations, amount - 1);
 
     for (int i = denominations[0]; i < amount; ++i)
       if ((table[i] > i ? -1 : table[i]) != greedy(denominations, i)) return i;
