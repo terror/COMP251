@@ -1,5 +1,9 @@
+package a2;
+
 import java.util.*;
 
 public class A2_Q1 {
-  public static int game_recursion(int[][] board) {}
+  public static int game_recursion(int[][] board) {
+    return 0;
+  }
 }
