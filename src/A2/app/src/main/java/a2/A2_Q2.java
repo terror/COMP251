@@ -31,9 +31,9 @@ public class A2_Q2 {
    *
    * @param coins The coin denominations.
    * @param amount The amount to sum to.
-   * @return The smallest number of coins that sum to `amount`.
+   * @return The memoized table.
    */
-  static int dp(int[] coins, int amount) {
+  static int[] dp(int[] coins, int amount) {
     int[] table = new int[amount + 1];
 
     Arrays.fill(table, amount + 1);
@@ -44,7 +44,7 @@ public class A2_Q2 {
       for (int j = 0; j < coins.length; ++j)
         if (coins[j] <= i) table[i] = Math.min(1 + table[i - coins[j]], table[i]);
 
-    return table[amount] > amount ? -1 : table[amount];
+    return table;
   }
 
   /*
@@ -57,20 +57,13 @@ public class A2_Q2 {
   public static int change(int[] denominations) {
     if (denominations.length == 0 || denominations.length == 1) return -1;
 
-    int l = 0, r = (denominations[denominations.length - 1] + denominations[denominations.length - 2]) - 1;
+    int amount = denominations[denominations.length - 1] + denominations[denominations.length - 2];
 
-    int ans = Integer.MAX_VALUE;
+    int[] table = dp(denominations, amount);
 
-    while (l <= r) {
-      int mid = l + (r - l) / 2;
-      if (greedy(denominations, mid) != dp(denominations, mid)) {
-        ans = Math.min(ans, mid);
-        r = mid - 1;
-      } else {
-        l = mid + 1;
-      }
-    }
+    for (int i = denominations[0]; i < amount; ++i)
+      if ((table[i] > i ? -1 : table[i]) != greedy(denominations, i)) return i;
 
-    return ans == Integer.MAX_VALUE ? -1 : ans;
+    return -1;
   }
 }
