@@ -5,6 +5,9 @@ alias f := fmt
 
 all: forbid fmt
 
+clean:
+  fd '.log|.gz|.aux|.fls|.toc|.fdb_latexmk|.out|.pre' -X rm
+
 forbid:
   ./bin/forbid
 
