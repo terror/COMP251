@@ -16,6 +16,60 @@ Claim: Inserting a node x into a red-black tree takes O(log n) time.
 
 \subsubsection*{Presentation}
 
+\begin{proof}
+  To prove that inserting a node $x$ into a red-black tree takes $O(log n)$ time, we
+  need to show that the number of operations performed during the insertion operation
+  is proportional to the height of the tree, which is $O(logn)$ as shown in the
+  correctness proof.
+
+  \spacing
+  \noindent
+  The insertion operation in a red-black tree can be divided into three main steps:
+
+  \begin{enumerate}
+    \item \textbf{Binary search tree insertion}: This step involves finding the correct
+      position for the new node $x$ in the tree based on its key value, and inserting
+      it as a regular binary search tree node.
+    \item \textbf{Coloring the new node red}: The new node is colored red to preserve the
+      red-black tree properties.
+    \item \textbf{Fixing the red-black tree properties}: If the insertion of the
+      new node causes a violation of the red-black tree properties, then one
+      or more rotations and/or color flips are performed to restore the properties.
+  \end{enumerate}
+
+  \noindent
+  Let $h$ be the height of the tree before the insertion operation, and let $h'$
+  be the height of the tree after the operation. Since step 1 involves a
+  standard binary search tree insertion, the number of comparisons performed
+  during this step is proportional to the height of the tree, i.e., $O(h)$.
+  Therefore, the worst-case time complexity of step 1 is $O(h)$, which is
+  $O(logn)$ in the average case for a balanced tree.
+
+  \spacing
+  \noindent
+  Step 2 involves a constant number of operations, namely setting the color of
+  the new node to red. Therefore, the time complexity of this step is $O(1)$.
+
+  \spacing
+  \noindent
+  Step 3 involves fixing any violations of the red-black tree properties that
+  may have occurred due to the insertion of the new node. The number of
+  operations required to fix these violations is proportional to the height of
+  the subtree affected by the violation. Since the subtree height is at most
+  h+1, the worst-case time complexity of step 3 is $O(h+1)$, which is $O(log n)$
+  in the average case for a balanced tree.
+
+  \spacing
+  \noindent
+  Therefore, the total worst-case time complexity of inserting a node into a
+  red-black tree is $O(log n)$. This is because step 1 takes $O(log n)$, step 2
+  takes $O(1)$, and step 3 takes $O(log n)$. Therefore, the total number of operations
+  is proportional to the height of the tree, which is $O(log n)$.
+\end{proof}
+
+\noindent
+Source: Slides
+
 \subsubsection*{Summary}
 
 \subsubsection*{Algorithm}
