@@ -13,6 +13,8 @@ forbid:
 
 fmt:
   fd .java | xargs google-java-format --replace
+  yarn run prettier --write src/Proof/main.tex
 
 dev-deps:
   brew install gradle google-java-format fd ripgrep
+  yarn add --dev prettier prettier-plugin-latex
