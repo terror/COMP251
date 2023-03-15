@@ -22,7 +22,10 @@ dependencies {
 
     // This dependency is used by the application.
     implementation 'com.google.guava:guava:31.1-jre'
+
+    implementation 'org.knowm.xchart:xchart:3.8.3'
 }
+
 
 application {
     // Define the main class for the application.

@@ -33,22 +33,38 @@ public class Tree {
   public void insert(int key) {
     Node node = root, par = null;
 
+    // Depending on the key, we traverse left or right
+    // => Same as in BST insertion.
     while (node != null) {
       par = node;
       if (key < node.data) node = node.left;
       else if (key > node.data) node = node.right;
+      // Don't insert duplicate nodes
       else throw new IllegalArgumentException("Tree already contains a node with key " + key + ".");
     }
 
+    // Color the new node red
     Node curr = new Node(key, RED);
 
+    // Insert the node based on the key
     if (par == null) root = curr;
     else if (key < par.data) par.left = curr;
     else par.right = curr;
 
+    // Set the parent of the newly inserted node
     curr.parent = par;
 
+    // Fix the red-black tree properties
     fixUp(curr);
+  }
+
+  /*
+   * Compute the height of this red-black tree.
+   *
+   * @return The height of the tree.
+   */
+  public int height() {
+    return heightHelper(root);
   }
 
   @Override
@@ -59,6 +75,17 @@ public class Tree {
   }
 
   /*
+   * Compute the height of the given tree.
+   *
+   * @param The node to start from.
+   * @return The height of the tree.
+   */
+  private int heightHelper(Node node) {
+    if (node == null) return 0;
+    return 1 + Math.max(heightHelper(node.left), heightHelper(node.right));
+  }
+
+  /*
    * Fix red-black tree properties after an insertion.
    *
    * @param node The node to initiate the fix from.
@@ -66,16 +93,22 @@ public class Tree {
   private void fixUp(Node node) {
     Node par = node.parent;
 
-    // Case 1: Parent is null or black
-    // => We don't need to do anything
+    // Case 1: If the parent is null, we've reached the root, which is the end of the recursion.
+    // also, if the parent is black, there's nothing to do since the red-black properties are
+    // preserved.
     if (par == null || par.color == BLACK) return;
 
-    // Case 2: Parent is red and is the root node
+    // From this point on, the parent is red.
+    Node grandparent = par.parent;
+
+    //// Case 2: If the grandparent is null, that means the parent is the root.
+    // If we enforce black roots (rule 2), the grandparent will never be null.
     // => Just need to recolor the parent node
     //     R        B
     //      \   ->   \
     //       R        R
-    if (par.parent == null) {
+    if (grandparent == null) {
+      // As this method is only called on red nodes, all we have to do is recolor the root black.
       par.color = BLACK;
       return;
     }
@@ -83,32 +116,42 @@ public class Tree {
     // Grab the uncle of the parent node
     Node uncle = getUncle(par);
 
-    // Case 3: Uncle is red
-    // => Recolor the parent, grandparent and uncle nodes
+    // Case 3: If the uncle is red, recolor the parent, grandparent, and uncle.
     if (uncle != null && uncle.color == RED) {
       par.color = BLACK;
       grandparent.color = RED;
       uncle.color = BLACK;
       // Recursively fix the grandparent node
       fixUp(grandparent);
+      // Parent is the left child of the grandparent.
     } else if (par == grandparent.left) {
-      // Case 4a:
+      // Case 4a: If the uncle is black and the node is the right child of its parent (forming a
+      // left-right zigzag pattern).
       if (node == par.right) {
         rotateLeft(par);
+        // Update the parent pointer to the new root node of the rotated subtree.
         par = node;
       }
-      // Case 5a:
+      // Case 5a: If the uncle is black and the node is the left child of its parent (forming a
+      // left-left straight pattern).
       rotateRight(grandparent);
+      // Recolor the original parent (now the root of the subtree) and grandparent.
       par.color = BLACK;
       grandparent.color = RED;
+
+      // Parent is the right child of the grandparent.
     } else {
-      // Case 4b:
+      // Case 4b: If the uncle is black and the node is the left child of its parent (forming a
+      // right-left zigzag pattern).
       if (node == par.left) {
         rotateRight(par);
+        // Update the parent pointer to the new root node of the rotated subtree.
         par = node;
       }
-      // Case 5b:
+      // Case 5b: If the uncle is black and the node is the right child of its parent (forming a
+      // right-right straight pattern).
       rotateLeft(grandparent);
+      // Recolor the original parent (now the root of the subtree) and grandparent.
       par.color = BLACK;
       grandparent.color = RED;
     }
@@ -157,6 +200,10 @@ public class Tree {
 
   /*
    * Replace the child of the parent node.
+   *
+   * @param par The parent node.
+   * @param oldChild The old child of the parent.
+   * @param newChild The new child to replace the old child with.
    */
   private void replace(Node par, Node oldChild, Node newChild) {
     if (par == null) root = newChild;
