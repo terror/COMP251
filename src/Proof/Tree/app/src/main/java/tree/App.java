@@ -82,7 +82,7 @@ public class App {
     for (int i = 0; i < cases.length; ++i) {
       System.out.println("Number of nodes: " + cases[i]);
       System.out.println("Height: " + computeHeight(cases[i]));
-      System.out.println("2 * log(n + 1): " + 2 * Math.log(cases[i] + 1));
+      System.out.println("2 * log(n + 1): " + 2 * (Math.log(cases[i] + 1) / Math.log(2)));
       System.out.println();
     }
   }
