@@ -5,6 +5,12 @@ import org.knowm.xchart.*;
 import org.knowm.xchart.style.markers.SeriesMarkers;
 
 public class App {
+  /*
+   * Run insertion on a tree with a given number of nodes.
+   *
+   * @param n The number of nodes the tree should have.
+   * @return The amount of time an insertion took.
+   */
   static double runInsertion(int n) {
     Tree tree = new Tree();
 
@@ -17,7 +23,10 @@ public class App {
     return (end - start) / 1000;
   }
 
-  public static void main(String[] args) {
+  /*
+   * Plot the insertion time chart.
+   */
+  static void plotChart() {
     int samples = 100;
 
     double[] x = new double[samples];
@@ -48,5 +57,33 @@ public class App {
     chart.addSeries("log(n) / 10", x, y2).setMarker(SeriesMarkers.NONE);
 
     new SwingWrapper<>(chart).displayChart();
+  }
+
+  /*
+   * Compute the height of a tree after inserting
+   * a certain amount of nodes.
+   *
+   * @param n The number of nodes to insert.
+   * @return The height of the tree after insertion.
+   */
+  static int computeHeight(int n) {
+    Tree tree = new Tree();
+    for (int i = 0; i < n; ++i) tree.insert(i);
+    return tree.height();
+  }
+
+  /*
+   * Compare the height of the tree with 2 * log(n + 1) for
+   * some sample test cases.
+   */
+  public static void main(String[] args) {
+    int[] cases = new int[] {1, 10, 100000, 1000000};
+
+    for (int i = 0; i < cases.length; ++i) {
+      System.out.println("Number of nodes: " + cases[i]);
+      System.out.println("Height: " + computeHeight(cases[i]));
+      System.out.println("2 * log(n + 1): " + 2 * Math.log(cases[i] + 1));
+      System.out.println();
+    }
   }
 }
