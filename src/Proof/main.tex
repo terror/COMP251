@@ -13,9 +13,7 @@ Structures
 -
 Proofs
 Assignment}
-\author{Liam
-Scalzulli\\
-\href{mailto:liam.scalzulli@mail.mcgill.ca}{liam.scalzulli@mail.mcgill.ca}}
+\author{Student ID: 261102963}\\
 \date{\today}
 
 
@@ -56,12 +54,10 @@ Scalzulli\\
     \end{enumerate}
 
     \noindent
-    Let $h$ be the height of the tree before the insertion operation, and let $h'$
-    be the height of the tree after the operation. Since step 1 involves a
-    standard binary search tree insertion, the number of comparisons performed during
-    this step is proportional to the height of the tree, i.e., $O(h)$. Therefore,
-    the worst-case time complexity of step 1 is $O(h)$, which is $O(logn)$ in the
-    average case for a balanced tree.
+    Since step 1 involves a standard binary search tree insertion, the number of
+    comparisons performed during this step is proportional to the height of the tree,
+    i.e., $O(h)$. Therefore, the worst-case time complexity of step 1 is $O(h)$,
+    which is $O(logn)$ in the average case for a balanced tree.
 
     \spacing
     \noindent
@@ -73,7 +69,7 @@ Scalzulli\\
     Step 3 involves fixing any violations of the red-black tree properties that
     may have occurred due to the insertion of the new node. The number of operations
     required to fix these violations is proportional to the height of the subtree
-    affected by the violation. Since the subtree height is at most h+1, the worst-case
+    affected by the violation. Since the subtree height is at most $h+1$, the worst-case
     time complexity of step 3 is $O(h+1)$, which is $O(log n)$ in the average
     case for a balanced tree.
 
@@ -96,20 +92,20 @@ Scalzulli\\
   coloring the new node red, and fixing any violations of the red-black tree properties.
   The time complexity of step 1 is $O(h)$, which is $O(logn)$ in the average case
   for a balanced tree (as shown in the correctness proof). Step 2 takes $O(1)$
-  and step 3 takes $O(h+1)$, which is also O(logn) in the average case. Therefore,
-  the total worst-case time complexity of inserting a node into a red-black tree
-  is $O(logn)$.
+  and step 3 takes $O(h+1)$, which is also $O(logn)$ in the average case.
+  Therefore, the total worst-case time complexity of inserting a node into a red-black
+  tree is $O(logn)$.
 
   \subsubsection*{Algorithm}
 
 
-  Below you will find an algorithm that implements insertion for a red-black
-  tree. The insertion algorithm includes the main three computational steps used
-  in the proof, namely: BST insertion, coloring the new node red and fixing the
-  red-black tree properties after the insertion was made. Many comments are made
-  throughout the code to make things easier to understand. The full code
-  includes a class $Node$ which defines a red-black tree node, $Tree$ which implements
-  a small subset of red-black tree functionality and a $main$ method for testing
+  Below you will find an algorithm that implements insertion for a red-black tree.
+  The insertion algorithm includes the main three computational steps used in
+  the proof, namely: BST insertion, coloring the new node red and fixing the red-black
+  tree properties after the insertion was made. Many comments are made
+  throughout the code to make things easier to understand. The full code includes
+  a class $Node$ which defines a red-black tree node, $Tree$ which implements a
+  small subset of red-black tree functionality and a $main$ method for testing
   out the insertion.
 
   \begin{verbatim}
@@ -361,15 +357,14 @@ Scalzulli\\
   \end{verbatim}
 
   \noindent
-  Note: code adapted and repurposed from the following reference:
-  \url{https://www.happycoders.eu/algorithms/red-black-tree-java/}
+  n.b. Code adapted and repurposed from the following reference: \url{https://www.happycoders.eu/algorithms/red-black-tree-java/}
 
   \subsubsection*{Code explanation}
 
 
-  Below is the time graph for red-black tree insertion. Setting aside outliers
-  and system differences (ran this on an M2 Pro Macbook 32GB RAM), it generally agrees
-  with the assigned $O(logn)$ time complexity.
+  Below is the time graph for red-black tree insertion. Setting aside outliers and
+  system differences (ran this on an M2 Pro Macbook 32GB RAM), it generally
+  agrees with the assigned $O(logn)$ time complexity.
 
   \newpage
   \vfill
@@ -382,11 +377,69 @@ Scalzulli\\
     \label{fig:example}
   \end{figure}
 
+  The above plot was generated with the following code (as provided in the java
+  source files):
+
+  \begin{verbatim}
+    /*
+     * Run insertion on a tree with a given number of nodes.
+     *
+     * @param n The number of nodes the tree should have.
+     * @return The amount of time an insertion took.
+     */
+    static double runInsertion(int n) {
+      Tree tree = new Tree();
+
+      for (int i = 0; i < n; ++i) tree.insert(i);
+
+      double start = System.nanoTime();
+      tree.insert(n);
+      double end = System.nanoTime();
+
+      return (end - start) / 1000;
+    }
+
+    /*
+     * Plot the insertion time chart.
+     */
+    static void plotChart() {
+      int samples = 100;
+
+      double[] x = new double[samples], y = new double[samples];
+
+      int n = 10;
+
+      for (int i = 0; i < samples; ++i) {
+        System.out.println("Current iteration: " + i);
+        y[i] = runInsertion(n);
+        x[i] = n;
+        n += 1;
+      }
+
+      XYChart chart =
+          QuickChart.getChart(
+              "Red-Black tree insertion time",
+              "Number of nodes",
+              "Execution Time (us)",
+              "Insertion time",
+              x,
+              y);
+
+      double[] y2 = new double[samples];
+
+      for (int i = 0; i < samples; ++i) y2[i] = Math.log(x[i]) / 10;
+
+      chart.addSeries("log(n) / 10", x, y2).setMarker(SeriesMarkers.NONE);
+
+      new SwingWrapper<>(chart).displayChart();
+    }
+  \end{verbatim}
+
   \subsubsection*{Real world example}
 
 
-  Red-black trees are a type of binary search tree that automatically balance
-  themselves. This makes them really useful in many computer science applications,
+  Red-black trees are a type of binary search tree that automatically balances
+  itself. This makes them really useful in many computer science applications,
   including Database Management Systems (DBMS). When working with databases, it's
   important to have a good way to organize and search for information, which is where
   red-black trees come in.
@@ -395,7 +448,7 @@ Scalzulli\\
   \noindent
   One way red-black trees are used in DBMS is through something called a B+ tree.
   This is a special kind of tree that works really well with computer storage and
-  is better for searching through lots of data. In a B+ tree, each node has a
+  is better for searching through lots of data. In B+ trees, each node has a
   bunch of keys and pointers to other nodes, all sorted by the keys.
 
   \spacing
@@ -413,7 +466,7 @@ Scalzulli\\
   tree stays balanced, which means it takes less time to do things like search
   or add new data. Specifically, adding a new node to a red-black tree takes O(log
   n) time, where n is the number of entries in the tree. This is super important
-  for big databases because it keeps everything running smoothly and quickly.
+  for large databases because it keeps operations running quickly.
 
   \spacing
   \noindent
@@ -440,8 +493,8 @@ Scalzulli\\
   \subsection*{Correctness Proof}
 
 
-  Claim: Red-Black Trees [CLRS 308]: A red-black tree with n internal nodes has
-  height at most 2 log(n + 1).
+  Claim: A red-black tree with $n$ internal nodes has
+  height at most $2log(n + 1)$.
 
   \subsubsection*{Presentation}
 
@@ -467,11 +520,17 @@ Scalzulli\\
   \subsubsection*{Summary}
 
 
-  The proof above uses induction to show that the subtree rooted at any node x
-  in a red-black tree contains at least $2^{bh(x)}- 1$ internal nodes, where $bh(
-  x)$ is the black-height of $x$. The base case is when $x$ is a leaf, and the inductive
-  step applies the inductive hypothesis to the two children of x and uses some arithmetic
-  to derive the desired lower bound.
+  The proof shows that the height of a red-black tree with n internal nodes is
+  at most 2 times the logarithm of $n+1$. The proof uses an idea called "black-height"
+  which measures the number of black nodes on any path from the root to a leaf node.
+  The proof shows that for any node $x$ in the tree, the subtree rooted at $x$ has
+  at least twice the black-height of $x$, minus 1 internal nodes. This is proven
+  by first showing that the claim is true for a node $x$ with height 0 (i.e., a
+  leaf node), and then using induction to show that the claim is true for any
+  node $x$ with positive height and two children. By adding up the minimum number
+  of internal nodes in each child subtree, plus one for the current node, the proof
+  shows that the subtree rooted at $x$ has at least twice the black-height of $x$,
+  minus 1 internal nodes. This proves the original claim for the entire tree.
 
   \subsubsection*{Algorithm}
 
@@ -576,59 +635,47 @@ Scalzulli\\
     2 * log(n + 1): 39.86314002403699
   \end{verbatim}
 
+  \noindent
   Confirming that the height does indeed remain below $2log(n + 1)$
 
   \subsubsection*{Real world example}
 
 
-  A real-world example where this height property is important is in search engines.
-  Search engines have to manage tons of data and be able to quickly search
-  through it to find what users are looking for. One way they do this is by using
-  something called an inverted index.
+  A practical application of the result that a red-black tree with $n$ internal nodes
+  has height at most $2 log(n + 1)$ is in the implementation of symbol tables for
+  efficient search, insertion, and deletion of key-value pairs.
 
   \spacing
   \noindent
-  An inverted index is a data structure that basically flips the relationship between
-  documents and the terms they contain. Instead of listing the terms that appear
-  in each document, an inverted index lists the documents in which each term appears.
-  This makes it easier and faster to search for specific terms.
+  Symbol tables are a fundamental data structure in computer science that allow for
+  the storage and retrieval of key-value pairs. They are used in a wide range of
+  applications, including databases, compilers, and web search engines.
 
   \spacing
   \noindent
-  Red-black trees can be used to create an inverted index by storing the terms
-  as keys and the lists of documents as values. When a search engine needs to find
-  documents containing a specific term, it can search the red-black tree to find
-  the term and get the list of documents quickly.
+  Red-black trees are a type of self-balancing binary search tree that can be used
+  to implement symbol tables. The height of a red-black tree affects the
+  efficiency of operations such as searching, insertion, and deletion. The result
+  that a red-black tree with $n$ internal nodes has height at most $2 log(n + 1)$
+  ensures that the height of the tree grows slowly as the number of nodes increases,
+  thus maintaining efficient performance for the various operations the data-structure
+  supports.
 
   \spacing
   \noindent
-  The height property of red-black trees (at most 2 log(n + 1)) is really important
-  for search engines because it means that searching for a term in the tree takes
-  a relatively small number of steps, even when there are lots of terms in the
-  index. This helps search engines return results to users quickly, even when
-  they're dealing with huge amounts of data.
-
-  \spacing
-  \noindent
-  So, red-black trees are great for search engines because they help create an efficient
-  inverted index, which makes searching through massive amounts of data fast and
-  easy. The height property of red-black trees ensures that the tree stays balanced
-  and operations like searching, inserting, and deleting stay fast, which is
-  super important when you're dealing with the crazy amounts of data search
-  engines have to handle.
+  For a real-world example, in the implementation of a compiler, a symbol table
+  can be used to store the names and types of variables, functions, and other
+  program elements. The compiler can use the symbol table to perform type checking,
+  name resolution, and other semantic analyses. By using a red-black tree to
+  implement the symbol table, the compiler can efficiently search for and insert
+  symbols, even as the size of the program grows.
 
   \spacing
   \noindent
   References:
 
   \begin{enumerate}
-    \item Cormen, T. H., Leiserson, C. E., Rivest, R. L., & Stein, C. (2009).
-      Introduction to Algorithms (3rd ed.). MIT Press.
-
-    \item Manning, C. D., Raghavan, P., & Schütze, H. (2008). Introduction to Information
-      Retrieval. Cambridge University Press.
-
-    \item Knuth, D. E. (1998). The Art of Computer Programming, Volume 3: Sorting
-      and Searching (2nd ed.). Addison-Wesley.
+    \item Sedgewick, R. (2011). Algorithms in C++: Parts 1-4: Fundamentals, Data
+      Structure, Sorting, Searching (3rd ed.). Addison-Wesley.
   \end{enumerate}
 \end{document}

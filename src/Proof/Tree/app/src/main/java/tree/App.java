@@ -29,8 +29,7 @@ public class App {
   static void plotChart() {
     int samples = 100;
 
-    double[] x = new double[samples];
-    double[] y = new double[samples];
+    double[] x = new double[samples], y = new double[samples];
 
     int n = 10;
 
@@ -73,10 +72,9 @@ public class App {
   }
 
   /*
-   * Compare the height of the tree with 2 * log(n + 1) for
-   * some sample test cases.
+   * Run a height verifier on a few sample cases.
    */
-  public static void main(String[] args) {
+  static void runHeightVerifier() {
     int[] cases = new int[] {1, 10, 100000, 1000000};
 
     for (int i = 0; i < cases.length; ++i) {
@@ -84,6 +82,26 @@ public class App {
       System.out.println("Height: " + computeHeight(cases[i]));
       System.out.println("2 * log(n + 1): " + 2 * (Math.log(cases[i] + 1) / Math.log(2)));
       System.out.println();
+    }
+  }
+
+  /*
+   * Program entrypoint.
+   */
+  public static void main(String[] args) {
+    if (args.length == 0) System.out.println("Available commands: plot | height");
+    else {
+      switch (args[0]) {
+        case "plot":
+          plotChart();
+          break;
+        case "height":
+          runHeightVerifier();
+          break;
+        default:
+          System.out.println("Invalid command. Available commands: plot | height");
+          break;
+      }
     }
   }
 }
