@@ -75,7 +75,8 @@ public class A3Q1 {
     while (!q.isEmpty()) {
       Node curr = q.remove();
 
-      if (curr.x == row - 1 || curr.x == 0 || curr.y == col - 1 || curr.y == 0) ans = Math.min(ans, curr.count);
+      if (curr.x == row - 1 || curr.x == 0 || curr.y == col - 1 || curr.y == 0)
+        ans = Math.min(ans, curr.count);
 
       for (int i = 0; i < 4; ++i) {
         Node offset = getOffset(directions[i]);
