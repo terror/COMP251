@@ -12,29 +12,39 @@ public class A3Q2 {
     }
   }
 
-  static void dfs(int v, long quantity, ArrayList<ArrayList<Node>> adj, long[] pieces, boolean vis[]) {
-    vis[v] = true;
+  static List<Integer> sort(ArrayList<ArrayList<Node>> adj) {
+    int n = adj.size();
 
-    for (Node n : adj.get(v)) {
-      if (!vis[n.piece]) {
-        pieces[n.piece] += quantity * n.quantity;
-        dfs(n.piece, quantity * n.quantity, adj, pieces, vis);
-      }
+    int[] deg = new int[n];
+
+    for (List<Node> nodes : adj) for (Node node : nodes) deg[node.piece]++;
+
+    Queue<Integer> queue = new LinkedList<>();
+
+    for (int i = 0; i < n; ++i) if (deg[i] == 0) queue.add(i);
+
+    List<Integer> ret = new ArrayList<>();
+
+    while (!queue.isEmpty()) {
+      int v = queue.poll();
+      ret.add(v);
+      for (Node node : adj.get(v)) if (--deg[node.piece] == 0) queue.add(node.piece);
     }
+
+    return ret;
   }
 
   public static long[] num_pieces(long[] pieces, int[][] instructions) {
     int n = pieces.length;
 
-    ArrayList<ArrayList<Node>> adj = new ArrayList<ArrayList<Node>>();
+    ArrayList<ArrayList<Node>> adj = new ArrayList<>();
 
-    for (int i = 0; i < n; ++i) adj.add(new ArrayList<Node>());
+    for (int i = 0; i < n; ++i) adj.add(new ArrayList<>());
 
-    for (int[] i : instructions)
-      adj.get(i[1]).add(new Node(i[0], i[2]));
+    for (int[] i : instructions) adj.get(i[1]).add(new Node(i[0], i[2]));
 
-    for (int i = 0; i < n; ++i)
-      if (pieces[i] != 0) dfs(i, pieces[i], adj, pieces, new boolean[n]);
+    for (int i : sort(adj))
+      for (Node node : adj.get(i)) pieces[node.piece] += pieces[i] * node.quantity;
 
     return pieces;
   }
