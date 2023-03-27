@@ -34,8 +34,7 @@ public class A3Q2 {
 
     for (int[] i : instructions) adj.get(i[1]).add(new int[] {i[0], i[2]});
 
-    for (int i : sort(adj))
-      for (int[] node : adj.get(i)) pieces[node[0]] += pieces[i] * node[1];
+    for (int i : sort(adj)) for (int[] node : adj.get(i)) pieces[node[0]] += pieces[i] * node[1];
 
     return pieces;
   }
